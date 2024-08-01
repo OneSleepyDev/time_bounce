@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Bouncing Clock</title>
+  <style>
+    /* Make the body full screen */
+    body {
+      background-color: black;
+      margin: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <!-- Create a canvas element to draw the circle -->
+  <canvas id="canvas"></canvas>
+
+  <script>
+    // Get the canvas element
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+   
+
+    // Set the circle properties
+    let x = canvas.width / 2;
+    let y = canvas.height / 2;
+    let vx = 1;
+    let vy = 1;
+    let radius = 20;
+    // Set the canvas dimensions to the full window size
+    updateCanvasSize();
+
+    // Set the font properties
+    const font = '96px Consolas';
+    ctx.font = font;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    // Set the color changing speed
+    const colorSpeed = 0.1;
+    let hue = 0;
+
+    // Main animation loop
+    function animate() {
+      requestAnimationFrame(animate);
+
+      // Update the circle position
+      x += vx;
+      y += vy;
+
+      // Bounce off the edges
+      if (x + radius > canvas.width || x - radius < 0) {
+        vx = -vx;
+      }
+      if (y + radius > canvas.height || y - radius < 0) {
+        vy = -vy;
+      }
+
+      // Clear the canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Get the current time
+      const now = new Date();
+      const date = `${now.toDateString()}`
+      const time = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+      
+
+      // Set the text color
+      ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+
+      // Draw the time
+      ctx.fillText(time, x, y);
+      ctx.fillText(date, x, y-96);
+
+      // Update the hue value
+      hue = (hue + colorSpeed) % 360;
+    }
+
+    // Start the animation
+    animate();
+
+    // Resize the canvas when the window is resized
+    window.addEventListener('resize', updateCanvasSize);
+
+    function updateCanvasSize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      x = canvas.width / 2;
+      y = canvas.height / 2;
+    }
+  </script>
+</body>
+</html>
